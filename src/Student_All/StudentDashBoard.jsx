@@ -1,19 +1,18 @@
-import React from 'react'
-import StudentLayout from './LAYOUT/StudentLayout'
-import AllCourses from '../Small_Components/AllCourses'
+import React from 'react';
+import StudentLayout from './LAYOUT/StudentLayout';
+import StudentCourseCards from './StudentCourseCards';
 
 const StudentDashBoard = () => {
+
   return (
     <>
+      <StudentLayout>
 
-    <StudentLayout>
-    
-    <AllCourses/>
+        <StudentCourseCards/>
 
-    </StudentLayout>
-    
+      </StudentLayout>
     </>
-  )
-}
+  );
+};
 
-export default StudentDashBoard
+export default StudentDashBoard;

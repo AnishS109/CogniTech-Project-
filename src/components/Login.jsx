@@ -6,7 +6,7 @@ const AdminLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  
+
   // Use useNavigate hook to get the navigate function
   const navigate = useNavigate();
 
@@ -19,7 +19,6 @@ const AdminLogin = () => {
     const loginData = { username, password };
 
     try {
-      
       const response = await fetch("http://localhost:5000/api/login/login-check", {
         method: "POST",
         headers: {
@@ -28,15 +27,17 @@ const AdminLogin = () => {
         body: JSON.stringify(loginData),
       });
 
-      
       if (response.ok) {
         const result = await response.json();
         console.log("Login successful", result);
         
-        if (result.user.type === 'admin') {
+        // Check user role and navigate with student_id as state
+        if (result.user.type === 'student') {
+          navigate("/student-dashboard", {
+            state: { student_id: result.user.id }  // Pass student_id as state
+          });
+        } else if (result.user.type === 'admin') {
           navigate("/admin-dashboard");
-        } else if (result.user.type === 'student') {
-          navigate("/student-dashboard");
         } else if (result.user.type === 'teacher') {
           navigate("/teacher-dashboard");
         } else {

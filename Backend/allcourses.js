@@ -9,7 +9,7 @@ allcourseDetails.use(express.json());
 allcourseDetails.use(express.urlencoded({ extended: true }));
 
 allcourseDetails.get("/all-course-details",(req,res) => {
-  const query = "SELECT name, description FROM allcourses"
+  const query = "SELECT name, description, lecture , quiz, id FROM allcourses"
 
   db.query(query,(err,result)=> {
     if (err) {

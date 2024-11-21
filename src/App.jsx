@@ -21,6 +21,16 @@ import TeacherAbout from './Teacher_All/TeacherAbout.jsx'
 import AdminUserManage from './Admin_All/adminUsermanage.jsx'
 import AdminCourseManage from './Admin_All/AdminCourseManage.jsx'
 import AdminQuizManage from './Admin_All/AdminQuizManage.jsx'
+import ReactCourse from "./Student_All/ViewCourses/ReactCourse.jsx"
+import JavaCourse from "./Student_All/ViewCourses/JavaCourse.jsx"
+import PythonCourse from "./Student_All/ViewCourses/PythonCourse.jsx"
+import SqlCourse from "./Student_All/ViewCourses/SqlCourse.jsx"
+import ExpressCourse from "./Student_All/ViewCourses/ExpressCourse.jsx"
+import MongoCourse from "./Student_All/ViewCourses/MongoCourse.jsx"
+import NodeCourse from "./Student_All/ViewCourses/NodeCourse.jsx"
+import AICourse from "./Student_All/ViewCourses/AICourse.jsx"
+import MLCourse from "./Student_All/ViewCourses/MLCourse.jsx"
+
 
 function App() {
 
@@ -67,7 +77,25 @@ function App() {
 
     <Route path="/admin-course-manage" element={<AdminCourseManage/>}/>
 
-    <Route path="/admin-quiz-manage" element={<AdminQuizManage/>}/>
+    <Route path="/admin-assign-course" element={<AdminQuizManage/>}/>
+
+    <Route path="/course/react-course" element={<ReactCourse/>}/>
+
+    <Route path="/course/java-course" element={<JavaCourse/>}/>
+
+    <Route path="/course/python-course" element={<PythonCourse/>}/>
+
+    <Route path="/course/sql-course" element={<SqlCourse/>}/>
+
+    <Route path="/course/express-course" element={ <ExpressCourse/> }/>
+
+    <Route path="/course/mongo-course" element={<MongoCourse/>}/>
+
+    <Route path="/course/node-course" element={<NodeCourse/>}/>
+
+    <Route path="/course/artificial-intelligence-course" element={<AICourse/>}/>
+
+    <Route path="/course/machine-learning-course" element={<MLCourse/>}/>
 
     </Routes>
     

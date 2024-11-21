@@ -1,7 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import StudentLayout from './LAYOUT/StudentLayout';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Card, CardContent, Typography, CircularProgress, Alert, Grid, Button, Box } from '@mui/material';
+
+// Import all course images
+import Python from "../Images/Python_Course.jpg";
+import sqlIMG from "../Images/SQL_Course.jpeg";
+import Artificial_IntelligenceIMG from "../Images/AI.jpeg";
+import ExpressIMG from "../Images/expressJS.jpeg";
+import javaIMG from "../Images/java.jpeg";
+import machineLearningIMG from "../Images/MachineLearning.jpeg";
+import mongoDBIMG from "../Images/mongoDB.jpeg";
+import nodeJSIMG from "../Images/nodeJS.jpeg";
+import ReactIMG from "../Images/React_Course.jpeg";
+
+// Create a mapping of course names to image URLs
+const courseImages = {
+  "Python Course": Python,
+  "React Course": ReactIMG,
+  "SQl Course": sqlIMG,
+  "Java Course": javaIMG,
+  "Express JS Course": ExpressIMG,
+  "Mongo DB Course": mongoDBIMG,
+  "Node JS course": nodeJSIMG,
+  "Artificial Intelligence Course": Artificial_IntelligenceIMG,
+  "Machine Learning Course": machineLearningIMG
+};
 
 const StudentEnrolledCourse = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -9,10 +34,21 @@ const StudentEnrolledCourse = () => {
   const [error, setError] = useState(null);
 
   const location = useLocation();
+  const navigate = useNavigate(); // useNavigate hook
   const studentIdFromLocation = location.state?.student_id;
   const studentId = studentIdFromLocation || localStorage.getItem('student_id');
 
-  const apiKey = 'http://localhost:5000/api/student-enrolled/student-course';  
+  const handleViewCourse = (course_id) => {
+    if (course_id === 1){navigate(`/course/python-course`);}
+    else if (course_id === 2){navigate(`/course/react-course`);}
+    else if (course_id === 3){navigate(`/course/sql-course`);}
+    else if (course_id === 4){navigate(`/course/java-course`);}
+    else if (course_id === 5){navigate(`/course/express-course`);}
+    else if (course_id === 6){navigate(`/course/mongo-course`);}
+    else if (course_id === 7){navigate(`/course/node-course`);}
+    else if (course_id === 8){navigate(`/course/artificial-intelligence-course`);}
+    else if (course_id === 9){navigate(`/course/machine-learning-course`);}
+  }
 
   useEffect(() => {
     if (!studentId) {
@@ -24,23 +60,30 @@ const StudentEnrolledCourse = () => {
     const fetchEnrolledCourses = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/student-enrolled/student-course`, {
-          params: {
-            student_id: studentId
-          },
-          headers: {
-            'Authorization': `Bearer ${apiKey}`
-          }
+          params: { student_id: studentId },
         });
 
-        if (response.data.enrolled_courses) {
-          setEnrolledCourses(response.data.enrolled_courses);
+        if (response.data && response.data.enrolled_courses) {
+          const transformedCourses = response.data.enrolled_courses.map(course => ({
+            course_id: course.course_id,
+            name: course.name,
+            description: course.description,
+            lecture: course.lecture,
+            quiz: course.quiz,
+            image: courseImages[course.name] || "" // Use the mapped image for each course
+          }));
+          setEnrolledCourses(transformedCourses);
         } else {
-          setError("No courses found for this student.");
+          setError("No enrolled courses found.");
         }
         setLoading(false);
       } catch (err) {
         console.error("Failed to fetch enrolled courses", err);
-        setError("Failed to fetch enrolled courses.");
+        if (err.response) {
+          setError(`Error: ${err.response.data.error || 'Failed to fetch enrolled courses.'}`);
+        } else {
+          setError('Network or server error');
+        }
         setLoading(false);
       }
     };
@@ -50,28 +93,92 @@ const StudentEnrolledCourse = () => {
 
   return (
     <StudentLayout>
-      <h1>Student Enrolled Courses</h1>
+      <Box sx={{ padding: 2 }}>
 
-      {loading && <p>Loading...</p>}
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress size={60} />
+          </Box>
+        )}
 
-      {error && <p>{error}</p>}
+        {error && (
+          <Alert severity="error" sx={{ marginTop: 3, backgroundColor: '#f8d7da', padding: 2, color: '#721c24', borderRadius: '5px' }}>
+            {error}
+          </Alert>
+        )}
 
-      {!loading && !error && enrolledCourses.length > 0 && (
-        <div>
-          {enrolledCourses.map((course) => (
-            <div key={course.course_id} className="course-item">
-              <h3>{course.name}</h3>
-              <p><strong>Description:</strong> {course.description}</p>
-              <p><strong>Lecture Count:</strong> {course.lecture}</p>
-              <p><strong>Quiz Count:</strong> {course.quiz}</p>
-            </div>
-          ))}
-        </div>
-      )}
+        {!loading && !error && enrolledCourses.length > 0 && (
+          <Grid container spacing={3}>
+            {enrolledCourses.map((course) => (
+              <Grid item xs={12} sm={6} md={4} key={course.course_id}>
+                <Card sx={{
+                  maxWidth: 345,
+                  boxShadow: '0px 15px 35px rgba(0, 0, 0, 0.15)',
+                  borderRadius: '8px',
+                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0px 20px 50px rgba(0, 0, 0, 0.2)'
+                  }
+                }}>
+                  <CardContent>
+                    {/* Course Name */}
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#333' }}>
+                      {course.name}
+                    </Typography>
 
-      {!loading && !error && enrolledCourses.length === 0 && (
-        <p>No courses found for this student.</p>
-      )}
+                    {/* Course Image */}
+                    {course.image && (
+                      <Box sx={{
+                        width: '100%',
+                        height: 200,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundImage: `url(${course.image})`,
+                        borderRadius: '8px',
+                        marginTop: 2,
+                      }} />
+                    )}
+
+                    {/* Course Description and Details */}
+                    <Typography variant="body2" color="textSecondary" paragraph sx={{ marginTop: 2 }}>
+                      <strong>Description:</strong> {course.description}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      <strong>Lecture Count:</strong> {course.lecture}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      <strong>Quiz Count:</strong> {course.quiz}
+                    </Typography>
+                    <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{
+                          '&:hover': { backgroundColor: '#2c6ed5' },
+                          padding: '8px 16px',
+                          fontWeight: 'bold',
+                          textTransform: 'none',
+                          borderRadius: '8px'
+                        }}
+                        onClick={() => handleViewCourse(course.course_id)} // Trigger navigation
+                      >
+                        View Course
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+
+        {!loading && !error && enrolledCourses.length === 0 && (
+          <Typography variant="h6" sx={{ textAlign: 'center', marginTop: 5, fontSize: '1.2rem', fontWeight: 500 }}>
+            No courses found for this student.
+          </Typography>
+        )}
+      </Box>
     </StudentLayout>
   );
 };

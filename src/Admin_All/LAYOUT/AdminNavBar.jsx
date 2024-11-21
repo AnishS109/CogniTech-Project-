@@ -46,7 +46,7 @@ const AdminNavBar = () => {
           <NavLink activeClassName="active" to="/admin-course-manage">Course Manage</NavLink> {/* Added Course Manage */}
         </li>
         <li>
-          <NavLink activeClassName="active" to="/admin-quiz-manage">Quiz Manage</NavLink> {/* Added Quiz Manage */}
+          <NavLink activeClassName="active" to="/admin-assign-course">Assign Course</NavLink> {/* Added Quiz Manage */}
         </li>
         <li>
           <Button
@@ -87,7 +87,7 @@ const AdminNavBar = () => {
                   <NavLink activeClassName="active" to="/admin-course-manage">Course Manage</NavLink> 
                 </li>
                 <li>
-                  <NavLink activeClassName="active" to="/admin-quiz-manage">Quiz Manage</NavLink>
+                  <NavLink activeClassName="active" to="/admin-assign-course">Assign Course</NavLink>
                 </li>
               </ul>
 

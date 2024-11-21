@@ -44,7 +44,7 @@ const StudentNavBar = () => {
           <NavLink activeClassName="active" to="/student-dashboard">Home</NavLink>
         </li>
         <li>
-          <NavLink activeClassName="active" to="/student-course">Courses</NavLink>
+          <NavLink activeClassName="active" to="/student-course">Enrolled Courses</NavLink>
         </li>
         <li>
           <NavLink activeClassName="active" to="/student-about">About</NavLink>
@@ -125,7 +125,7 @@ const StudentNavBar = () => {
                   <NavLink activeClassName="active" to="/student-dashboard">Home</NavLink>
                 </li>
                 <li>
-                  <NavLink activeClassName="active" to="/student-course">Courses</NavLink>
+                  <NavLink activeClassName="active" to="/student-course">Enrolled Courses</NavLink>
                 </li>
                 <li>
                   <NavLink activeClassName="active" to="/student-about">About</NavLink>

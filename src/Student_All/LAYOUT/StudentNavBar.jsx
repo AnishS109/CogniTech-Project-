@@ -74,50 +74,6 @@ const StudentNavBar = () => {
                 <span style={{ color: 'rgb(235, 71, 30)', fontSize: "30px", fontWeight: 1000 }}>C</span>ogniTech
               </Typography>
             </Box>
-
-            
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              flexGrow: 1,
-              mx: 2
-            }}>
-              <TextField
-                variant="outlined"
-                placeholder="Search Course"
-                size="small"
-                sx={{
-                  bgcolor: 'white',
-                  borderRadius: 1,
-                  width: { xs: '80%', sm: '300px', md: '400px' },
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'rgba(255, 255, 255, 0.5)', 
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'rgb(235, 71, 30)', 
-                    },
-                  },
-                }}
-              />
-
-              <IconButton
-                sx={{
-                  color: 'white',
-                  bgcolor: 'rgb(235, 71, 30)', 
-                  ml: 1,
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  '&:hover': {
-                    bgcolor: 'rgb(235, 71, 30)', 
-                  },
-                }}
-              >
-                <SearchIcon />
-              </IconButton>
-            </Box>
-
             
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
               <ul className='navbar-options'>

@@ -39,6 +39,7 @@ const StudentEnrolledCourse = () => {
   const studentId = studentIdFromLocation || localStorage.getItem('student_id');
 
   const handleViewCourse = (course_id) => {
+    console.log("Payment Gateway");
     if (course_id === 1){navigate(`/course/python-course`);}
     else if (course_id === 2){navigate(`/course/react-course`);}
     else if (course_id === 3){navigate(`/course/sql-course`);}
@@ -145,10 +146,10 @@ const StudentEnrolledCourse = () => {
                       <strong>Description:</strong> {course.description}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      <strong>Lecture Count:</strong> {course.lecture}
+                      <strong>Total Lectures:</strong> {course.lecture}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      <strong>Quiz Count:</strong> {course.quiz}
+                      <strong>Total Quiz:</strong> {course.quiz}
                     </Typography>
                     <Box sx={{ textAlign: 'center', marginTop: 3 }}>
                       <Button

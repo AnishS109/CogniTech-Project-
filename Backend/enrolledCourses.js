@@ -21,20 +21,29 @@ enrolledCourses.post("/enrolled-courses", async (req, res) => {
   `;
   const values = [student_id, course_id];
 
-  try {
-    const result = await db.execute(query, values);
+  // try {
+  //   const result = await db.execute(query, values);
 
-    res.status(200).json({
-      message: "Course enrollment successful",
-      enrolled_course: {
+  //   res.status(200).json({
+  //     message: "Course enrollment successful",
+  //     enrolled_course: {
+  //       student_id,
+  //       course_id
+  //     }
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  //   res.status(500).json({ error: "An error occurred while enrolling in the course." });
+  // }
+
+  db.query(query,values, (err,result) => {
+    res.json({
+      enrolled_course:{
         student_id,
         course_id
       }
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "An error occurred while enrolling in the course." });
-  }
+    })
+  })
 });
 
 module.exports = enrolledCourses;

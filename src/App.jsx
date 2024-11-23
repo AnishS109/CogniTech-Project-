@@ -18,9 +18,9 @@ import StudentAbout from './Student_All/StudentAbout.jsx'
 import TeacherCourses from './Teacher_All/TeacherCourses.jsx'
 import TeacherQuiz from './Teacher_All/TeacherQuiz.jsx'
 import TeacherAbout from './Teacher_All/TeacherAbout.jsx'
-import AdminUserManage from './Admin_All/adminUsermanage.jsx'
+import AdminUserManage from './Admin_All/AdminUserManage.jsx'
 import AdminCourseManage from './Admin_All/AdminCourseManage.jsx'
-import AdminQuizManage from './Admin_All/AdminQuizManage.jsx'
+import AdminAssignCourse from './Admin_All/AdminAssignCourse.jsx'
 import ReactCourse from "./Student_All/ViewCourses/ReactCourse.jsx"
 import JavaCourse from "./Student_All/ViewCourses/JavaCourse.jsx"
 import PythonCourse from "./Student_All/ViewCourses/PythonCourse.jsx"
@@ -77,7 +77,7 @@ function App() {
 
     <Route path="/admin-course-manage" element={<AdminCourseManage/>}/>
 
-    <Route path="/admin-assign-course" element={<AdminQuizManage/>}/>
+    <Route path="/admin-assign-course" element={<AdminAssignCourse/>}/>
 
     <Route path="/course/react-course" element={<ReactCourse/>}/>
 

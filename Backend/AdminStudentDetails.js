@@ -11,19 +11,21 @@ AdminStudentDetails.use(express.urlencoded({ extended:true }));
 
 AdminStudentDetails.get("/admin-student-details", async (req, res) => {
   const query = `
-    SELECT 
-      rd.id AS student_id,
-      rd.name AS student_name,
-      rd.username AS student_username,
-      GROUP_CONCAT(ac.name ORDER BY ac.name) AS enrolled_courses
-    FROM 
-      registration_details rd
-    JOIN 
-      enrolled_course ec ON rd.id = ec.student_id
-    JOIN 
-      allcourses ac ON ac.id = ec.course_id
-    GROUP BY 
-      rd.id, rd.name, rd.username;
+SELECT 
+  rd.id AS student_id,
+  rd.name AS student_name,
+  rd.username AS student_username,
+  GROUP_CONCAT(ac.name ORDER BY ac.name) AS enrolled_courses
+FROM 
+  registration_details rd
+LEFT JOIN 
+  enrolled_course ec ON rd.id = ec.student_id
+LEFT JOIN 
+  allcourses ac ON ac.id = ec.course_id
+WHERE 
+  rd.type = 'student'  
+GROUP BY 
+  rd.id, rd.name, rd.username;
   `;
 
   db.query(query, (err, result) => {   

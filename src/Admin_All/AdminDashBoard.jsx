@@ -23,7 +23,7 @@ const AdminDashBoard = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch('/api/teachers'); 
+      const response = await fetch('http://localhost:5000/api/admin-all/teacher-all-course'); 
       const data = await response.json();
       setTeachers(data);
     } catch (error) {
@@ -86,11 +86,11 @@ const AdminDashBoard = () => {
                   </TableHead>
                   <TableBody>
                     {teachers.map((teacher) => (
-                      <TableRow key={teacher.id}>
-                        <TableCell>{teacher.id}</TableCell> 
-                        <TableCell>{teacher.name}</TableCell>
-                        <TableCell>{teacher.username}</TableCell>
-                        <TableCell>{teacher.course_assigned}</TableCell>
+                      <TableRow key={teacher.teacher_id}>
+                        <TableCell>{teacher.teacher_id}</TableCell>
+                        <TableCell>{teacher.teacher_name}</TableCell>
+                        <TableCell>{teacher.teacher_username}</TableCell>
+                        <TableCell>{teacher.course_name ? teacher.course_name : "No Course Assigned"}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

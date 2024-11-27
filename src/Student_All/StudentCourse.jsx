@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import StudentLayout from './LAYOUT/StudentLayout';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Card, CardContent, Typography, CircularProgress, Alert, Grid, Button, Box } from '@mui/material';
 
 // Import all course images
@@ -40,8 +40,7 @@ const StudentEnrolledCourse = () => {
 
   // Handle course navigation
   const handleViewCourse = (course_id) => {
-    // console.log("Navigating to course", course_id);
-    navigate(`/course/view-course`);
+    navigate(`/course/view-course`, { state: { course_id } });
     
   }
 
@@ -51,29 +50,40 @@ const StudentEnrolledCourse = () => {
       setLoading(false);
       return;
     }
-
+  
     const fetchEnrolledCourses = async () => {
       try {
         const response = await axios.get(`http://localhost:5001/api/enrolled/enrolled-course`, {
           params: { student_id: studentId },
         });
-
-        // console.log("API Response:", response.data); // Debugging step
-
+  
+        // Check if the response contains enrolled courses
         if (response.data && response.data.enrolled_courses) {
           const transformedCourses = response.data.enrolled_courses.map((enrollment) => {
             const course = enrollment.course;  // Accessing the course object
-            // console.log("Course Data:", course); // Check individual course data
-            return {
-              course_id: course._id,  // Assuming _id is unique for each course
-              name: course.course_name,  // Mapping course_name field
-              description: course.description,
-              lecture: course.lecture,
-              quiz: course.quiz,
-              image: courseImages[course.course_name] || ""  // Use the mapped image for each course
-            };
-          });
-          setEnrolledCourses(transformedCourses);
+  
+            // Check if the course is valid and has necessary properties
+            if (course && course._id && course.course_name && course.description) {
+              return {
+                course_id: course._id,  // Assuming _id is unique for each course
+                name: course.course_name,  // Mapping course_name field
+                description: course.description,
+                lecture: course.lecture,
+                quiz: course.quiz,
+                image: courseImages[course.course_name] || "",  // Use the mapped image for each course
+              };
+            } else {
+              // If course data is invalid, we log an error and return null
+              console.error("Invalid course data:", course);
+              return null;
+            }
+          }).filter(course => course !== null);  // Remove invalid courses
+  
+          if (transformedCourses.length > 0) {
+            setEnrolledCourses(transformedCourses);
+          } else {
+            setError("No valid enrolled courses found.");
+          }
         } else {
           setError("No enrolled courses found.");
         }
@@ -88,7 +98,7 @@ const StudentEnrolledCourse = () => {
         setLoading(false);
       }
     };
-
+  
     fetchEnrolledCourses();
   }, [studentId]);
 
@@ -152,6 +162,7 @@ const StudentEnrolledCourse = () => {
                       <strong>Total Quiz:</strong> {course.quiz}
                     </Typography>
                     <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                      
                       <Button
                         variant="contained"
                         color="primary"
@@ -166,6 +177,7 @@ const StudentEnrolledCourse = () => {
                       >
                         View Course
                       </Button>
+                      
                     </Box>
                   </CardContent>
                 </Card>

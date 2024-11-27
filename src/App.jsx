@@ -22,7 +22,7 @@ import AdminUserManage from './Admin_All/AdminUserManage.jsx'
 import AdminCourseManage from './Admin_All/AdminCourseManage.jsx'
 import AdminAssignCourse from './Admin_All/AdminAssignCourse.jsx'
 import ViewCourse from './Student_All/ViewCourses/ViewCourse.jsx'
-import DemoVideo from './Student_All/DemoVideo.jsx'
+import CourseForm from './Student_All/COURSEform.jsx'
 
 
 
@@ -75,7 +75,7 @@ function App() {
 
     <Route path="/course/view-course" element={<ViewCourse/>}/>
 
-    <Route path="/upload-video" element={<DemoVideo/>}/>
+    <Route path="/course/aaa" element={<CourseForm/>}/>
 
 
     </Routes>

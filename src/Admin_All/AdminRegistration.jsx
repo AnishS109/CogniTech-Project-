@@ -12,10 +12,12 @@ const AdminRegistration = () => {
     email: '',
     username: '',
     password: '',
-    type: 'admin'
+    type: 'Admin'
   });
 
   const [error, setError] = useState(''); 
+  const [successMessage, setSuccessMessage] = useState('');  // State to handle success messages
+  const [loading, setLoading] = useState(false); // State to handle loading state
 
   const navigate = useNavigate();
 
@@ -37,24 +39,28 @@ const AdminRegistration = () => {
     }
 
     setError('');
-    
+    setSuccessMessage('');
+    setLoading(true);
+
     try {
-      const response = await fetch("http://localhost:5000/api/registration/registration-details", {
+      const response = await fetch("http://localhost:5001/api/user/user-register", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Form submitted successfully', result);
+      const result = await response.json();
+      setLoading(false); // Set loading to false once request is complete
 
+      if (response.ok) {
+        setSuccessMessage(result.message || "Successfully Registered!");
         navigate("/login");
       } else {
-        setError('Failed to submit the form. Please try again.');
+        setError(result.message || 'Failed to submit the form. Please try again.');
       }
     } catch (error) {
       console.error('Error in submitting the form:', error);
+      setLoading(false); // Set loading to false in case of error
       setError('Error in submitting the form. Please try again.');
     }
   };
@@ -113,6 +119,24 @@ const AdminRegistration = () => {
             }}
           >
             {error}
+          </Typography>
+        )}
+
+        {successMessage && (
+          <Typography
+            color="success.main"
+            variant="body2"
+            align="center"
+            sx={{
+              marginBottom: '16px',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              backgroundColor: '#e8f5e9',
+              padding: '8px',
+              borderRadius: '5px',
+            }}
+          >
+            {successMessage}
           </Typography>
         )}
 
@@ -208,6 +232,7 @@ const AdminRegistration = () => {
             variant="contained"
             color="primary"
             type="submit"
+            disabled={loading}  // Disable button while loading
             sx={{
               mt: 3,
               py: 1.5,
@@ -219,7 +244,7 @@ const AdminRegistration = () => {
               },
             }}
           >
-            Register
+            {loading ? 'Submitting...' : 'Register'}
           </Button>
         </form>
       </Box>

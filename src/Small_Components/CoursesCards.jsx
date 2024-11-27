@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
-import Python from "../Images/Python_Course.jpg";
+import Python from "../Images/Python_Course.jpeg";
 import ReactIMG from "../Images/React_Course.jpeg";
 import sqlIMG from "../Images/SQL_Course.jpeg";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Box } from '@mui/material';
@@ -21,7 +21,7 @@ const CoursesCards = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/courses-details");
+        const response = await axios.get("http://localhost:5001/api/latest/latest-course");
         setCourses(response.data);
       } catch (error) {
         console.error('Error fetching courses:', error);

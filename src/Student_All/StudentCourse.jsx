@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'; // Import useNaviga
 import { Card, CardContent, Typography, CircularProgress, Alert, Grid, Button, Box } from '@mui/material';
 
 // Import all course images
-import Python from "../Images/Python_Course.jpg";
+import Python from "../Images/Python_Course.jpeg";
 import sqlIMG from "../Images/SQL_Course.jpeg";
 import Artificial_IntelligenceIMG from "../Images/AI.jpeg";
 import ExpressIMG from "../Images/expressJS.jpeg";
@@ -32,23 +32,17 @@ const StudentEnrolledCourse = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();  // Initialize navigate
 
   const location = useLocation();
-  const navigate = useNavigate(); // useNavigate hook
   const studentIdFromLocation = location.state?.student_id;
   const studentId = studentIdFromLocation || localStorage.getItem('student_id');
 
+  // Handle course navigation
   const handleViewCourse = (course_id) => {
-    console.log("Payment Gateway");
-    if (course_id === 1){navigate(`/course/python-course`);}
-    else if (course_id === 2){navigate(`/course/react-course`);}
-    else if (course_id === 3){navigate(`/course/sql-course`);}
-    else if (course_id === 4){navigate(`/course/java-course`);}
-    else if (course_id === 5){navigate(`/course/express-course`);}
-    else if (course_id === 6){navigate(`/course/mongo-course`);}
-    else if (course_id === 7){navigate(`/course/node-course`);}
-    else if (course_id === 8){navigate(`/course/artificial-intelligence-course`);}
-    else if (course_id === 9){navigate(`/course/machine-learning-course`);}
+    // console.log("Navigating to course", course_id);
+    navigate(`/course/view-course`);
+    
   }
 
   useEffect(() => {
@@ -60,19 +54,25 @@ const StudentEnrolledCourse = () => {
 
     const fetchEnrolledCourses = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/student-enrolled/student-course`, {
+        const response = await axios.get(`http://localhost:5001/api/enrolled/enrolled-course`, {
           params: { student_id: studentId },
         });
 
+        // console.log("API Response:", response.data); // Debugging step
+
         if (response.data && response.data.enrolled_courses) {
-          const transformedCourses = response.data.enrolled_courses.map(course => ({
-            course_id: course.course_id,
-            name: course.name,
-            description: course.description,
-            lecture: course.lecture,
-            quiz: course.quiz,
-            image: courseImages[course.name] || "" // Use the mapped image for each course
-          }));
+          const transformedCourses = response.data.enrolled_courses.map((enrollment) => {
+            const course = enrollment.course;  // Accessing the course object
+            // console.log("Course Data:", course); // Check individual course data
+            return {
+              course_id: course._id,  // Assuming _id is unique for each course
+              name: course.course_name,  // Mapping course_name field
+              description: course.description,
+              lecture: course.lecture,
+              quiz: course.quiz,
+              image: courseImages[course.course_name] || ""  // Use the mapped image for each course
+            };
+          });
           setEnrolledCourses(transformedCourses);
         } else {
           setError("No enrolled courses found.");
@@ -185,3 +185,5 @@ const StudentEnrolledCourse = () => {
 };
 
 export default StudentEnrolledCourse;
+
+

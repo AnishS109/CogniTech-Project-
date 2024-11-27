@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { useNavigate } from 'react-router-dom';
 
 const TeacherRegistration = () => {
   const [formData, setFormData] = useState({
@@ -11,18 +11,18 @@ const TeacherRegistration = () => {
     password: '',
     subject: '',
     experience: '',
-    type: 'teacher', 
+    type: 'Teacher', // default type is Teacher
   });
 
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); 
-    setSuccessMessage(''); 
+    setError('');
+    setSuccessMessage('');
 
     const { name, email, phone_number, username, password, subject, experience, type } = formData;
 
@@ -38,22 +38,19 @@ const TeacherRegistration = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/registration/registration-details', {
+      const response = await fetch('http://localhost:5001/api/user/user-register', { // Update the API endpoint
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sanitizedFormData),
       });
 
+      const result = await response.json();
+
       if (response.ok) {
-        const result = await response.json();
         setSuccessMessage(result.message || 'Registration successful');
-        console.log('Form submitted successfully', result);
-        
-        
-        navigate("/login");
+        navigate("/login"); 
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'An error occurred while submitting the form.');
+        setError(result.message || 'An error occurred while submitting the form.');
       }
     } catch (error) {
       console.error('Error in submitting the form:', error);
@@ -122,7 +119,7 @@ const TeacherRegistration = () => {
 
         {successMessage && (
           <Typography
-            color="success"
+            color="success.main"
             variant="body2"
             align="center"
             sx={{

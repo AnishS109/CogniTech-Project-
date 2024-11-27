@@ -4,7 +4,7 @@ import ReactLecture1 from "../Lectures/React-L-1.mp4";
 import ReactLecture2 from "../Lectures/React-L-2.mp4";
 import StudentLayout from '../LAYOUT/StudentLayout';
 
-function ReactCourse() {
+function ViewCourse() {
   const [selectedLecture, setSelectedLecture] = useState(null);  // Store selected lecture
   const [isPaused, setIsPaused] = useState(false);
   const [videoTime, setVideoTime] = useState(0);
@@ -157,21 +157,22 @@ function ReactCourse() {
     { id: 2, title: 'Lecture 4', videoUrl: ReactLecture2 },
     { id: 2, title: 'Lecture 5', videoUrl: ReactLecture2 },
     { id: 2, title: 'Lecture 6', videoUrl: ReactLecture2 },
+    { id: 2, title: 'Lecture 7', videoUrl: ReactLecture2 },
+    { id: 2, title: 'Lecture 8', videoUrl: ReactLecture2 },
   ];
 
   const selectedLectureData = lectures.find(lecture => lecture.id === selectedLecture);
 
   return (
     <StudentLayout>
-      
     <div style={{ margin: 20 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
         <Typography variant='h3'>
-        React Course
+        Python Course
       </Typography>
       <br />
-          <Typography variant="h6" gutterBottom>Select Lecture</Typography>
+          <Typography variant="h5" gutterBottom>Select Lecture</Typography>
           <FormControl fullWidth>
             <InputLabel id="lecture-select-label">Select Lecture</InputLabel>
             <Select
@@ -245,8 +246,7 @@ function ReactCourse() {
           </Typography>
         </Box>
       )}
-
-<Box p={4}>
+      <Box p={4}>
           <Button
             size="large"
             variant="contained"
@@ -292,10 +292,10 @@ function ReactCourse() {
             </div>
           )}
         </Box>
-
     </div>
     </StudentLayout>
   );
 }
 
-export default ReactCourse;
+export default ViewCourse;
+

@@ -6,7 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import Python from "../Images/Python_Course.jpg";
+import Python from "../Images/Python_Course.jpeg";
 import ReactIMG from "../Images/React_Course.jpeg";
 import sqlIMG from "../Images/SQL_Course.jpeg";
 import Artificial_IntelligenceIMG from "../Images/AI.jpeg";
@@ -31,7 +31,7 @@ const StudentCourseCards = () => {
 
   useEffect(() => {
     if (studentId) {
-      console.log("Student ID:", studentId); 
+      // console.log("Student ID:", studentId); 
 
       localStorage.setItem('student_id', studentId);
     } else {
@@ -43,7 +43,9 @@ const StudentCourseCards = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api-courses/all-course-details");
+        const response = await axios.get("http://localhost:5001/api/all/all-courses");
+        // console.log(response.data);
+        
         setCourses(response.data);
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -80,6 +82,7 @@ const StudentCourseCards = () => {
 
   const handleEnrollOpen = (course) => {
     setSelectedCourse(course);
+    console.log("Payment Gateway")
     setEnrollOpen(true);  
   };
 
@@ -93,7 +96,7 @@ const StudentCourseCards = () => {
     if (studentId && selectedCourse) {
       try {
 
-        const response = await axios.post("http://localhost:5000/api/enroll/enrolled-courses", {
+        const response = await axios.post("http://localhost:5001/api/enrolled/enrolled-course", {
           student_id: studentId,
           course_id: selectedCourse.id 
         });
@@ -124,7 +127,7 @@ const StudentCourseCards = () => {
                   <CardMedia
                     sx={{ height: 160, objectFit: 'fill' }}
                     component="img"
-                    image={staticImages[normalizeCourseName(course.name)] || Python}
+                    image={staticImages[normalizeCourseName(course.title)] || Python}
                     alt={course.name || 'Default Course'}
                   />
                   <CardContent>
@@ -152,11 +155,11 @@ const StudentCourseCards = () => {
         {/* Course details dialog */}
         {selectedCourse && (
           <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-            <DialogTitle>{selectedCourse.name}</DialogTitle>
+            <DialogTitle>{selectedCourse.title}</DialogTitle>
             <DialogContent>
               <Typography variant="body1" paragraph>
                 {selectedCourse.description}
-              </Typography>
+              </Typography>a
               <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
                 <img
                   src={staticImages[normalizeCourseName(selectedCourse.name)] || Python}

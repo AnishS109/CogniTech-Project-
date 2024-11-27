@@ -6,7 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import Python from "../Images/Python_Course.jpg";
+import Python from "../Images/Python_Course.jpeg";
 import ReactIMG from "../Images/React_Course.jpeg";
 import sqlIMG from "../Images/SQL_Course.jpeg";
 import Artificial_IntelligenceIMG from "../Images/AI.jpeg";
@@ -27,7 +27,7 @@ const AllCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api-courses/all-course-details");
+        const response = await axios.get("http://localhost:5001/api/all/all-courses");
         setCourses(response.data);
       } catch (error) {
         console.error('Error fetching courses:', error);

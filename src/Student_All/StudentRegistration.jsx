@@ -10,10 +10,10 @@ const StudentRegistration = () => {
     email: '',
     username: '',
     password: '',
-    type: 'student',
+    type: 'Student',
     subject: '',     
     experience: '',  
-});
+  });
 
   const navigate = useNavigate();
 
@@ -59,8 +59,7 @@ const StudentRegistration = () => {
     setError('');
 
     try {
-  
-      const response = await fetch('http://localhost:5000/api/registration/registration-details', {
+      const response = await fetch('http://localhost:5001/api/user/user-register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,16 +67,16 @@ const StudentRegistration = () => {
         body: JSON.stringify(newFormData),
       });
 
-      if (response.ok) {
-        const result = await response.json();
+      const result = await response.json();
 
+      if (response.ok) {
         setSuccess(true);
         console.log('Form submitted successfully', result);
-
         navigate("/login");
-      } 
+      } else {
+        setError(result.message || 'An error occurred while submitting the form.');
+      }
     } catch (error) {
-      
       console.error('Error in submitting the form:', error);
       setError('An error occurred while submitting the form.');
     }
@@ -123,7 +122,6 @@ const StudentRegistration = () => {
           Student Registration
         </Typography>
 
-        
         {error && (
           <Typography
             color="error"
@@ -154,7 +152,6 @@ const StudentRegistration = () => {
         )}
 
         <form onSubmit={handleSubmit}>
-          
           <TextField
             fullWidth
             label="Full Name"
@@ -206,8 +203,6 @@ const StudentRegistration = () => {
             margin="normal"
             required
           />
-
-          
           <Button
             fullWidth
             variant="contained"

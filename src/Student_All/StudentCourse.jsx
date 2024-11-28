@@ -155,12 +155,12 @@ const StudentEnrolledCourse = () => {
                     <Typography variant="body2" color="textSecondary" paragraph sx={{ marginTop: 2 }}>
                       <strong>Description:</strong> {course.description}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    {/* <Typography variant="body2" color="textSecondary">
                       <strong>Total Lectures:</strong> {course.lecture}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       <strong>Total Quiz:</strong> {course.quiz}
-                    </Typography>
+                    </Typography> */}
                     <Box sx={{ textAlign: 'center', marginTop: 3 }}>
                       
                       <Button

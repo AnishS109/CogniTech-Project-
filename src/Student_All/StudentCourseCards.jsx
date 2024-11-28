@@ -167,13 +167,13 @@ const StudentCourseCards = () => {
                   style={{ width: '250px', height: 'auto' }}
                 />
               </Box>
-              <Box sx={{ marginTop: '20px' }}>
+              {/* <Box sx={{ marginTop: '20px' }}>
                 <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Total Lectures:</Typography>
                 <Typography variant="body2">{selectedCourse.lecture || 'N/A'}</Typography>
 
                 <Typography variant="body1" sx={{ fontWeight: 'bold', marginTop: '10px' }}>Total Quizzes:</Typography>
                 <Typography variant="body2">{selectedCourse.quiz || 'N/A'}</Typography>
-              </Box>
+              </Box> */}
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Close</Button>

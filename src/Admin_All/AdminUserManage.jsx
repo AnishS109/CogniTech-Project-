@@ -9,7 +9,7 @@ const AdminUserManage = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin-student/admin-student-details');
+      const response = await fetch('http://localhost:5001/api/admin-s/admin-student-details');
       const data = await response.json();
       setStudents(data);
     } catch (error) {
@@ -24,7 +24,7 @@ const AdminUserManage = () => {
 
   const confirmDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin-manage/user-manage/${studentToDelete}`, {
+      const response = await fetch(`http://localhost:5001/api/admin-user-m/user-manage/${studentToDelete}`, {
         method: 'DELETE',
       });
 
@@ -69,16 +69,16 @@ const AdminUserManage = () => {
                   </TableHead>
                   <TableBody>
                     {students.map((student) => (
-                      <TableRow key={student.student_id}>
-                        <TableCell>{student.student_id}</TableCell>
-                        <TableCell>{student.student_name}</TableCell>
-                        <TableCell>{student.student_username}</TableCell>
-                        <TableCell>{student.enrolled_courses ? student.enrolled_courses : "No Course Enrolled"}</TableCell>
+                      <TableRow key={student.studentId}>
+                        <TableCell>{student.studentId}</TableCell>
+                        <TableCell>{student.studentName}</TableCell>
+                        <TableCell>{student.studentUsername}</TableCell>
+                        <TableCell>{student.enrolledCourses ? student.enrolledCourses : "No Course Enrolled"}</TableCell>
                         <TableCell>
                           <Button
                             variant="contained"
                             color="error"
-                            onClick={() => handleDelete(student.student_id)}
+                            onClick={() => handleDelete(student.studentId)}
                           >
                             Delete
                           </Button>

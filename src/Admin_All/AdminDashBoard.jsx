@@ -9,9 +9,10 @@ const AdminDashBoard = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin-student/admin-student-details');
+      const response = await fetch('http://localhost:5001/api/admin-s/admin-student-details');
       const data = await response.json();
       setStudents(data);
+      
     } catch (error) {
       console.error('Error fetching student data:', error);
     }
@@ -23,7 +24,7 @@ const AdminDashBoard = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin-all/teacher-all-course'); 
+      const response = await fetch('http://localhost:5001/api/admin-s/teacher-details'); 
       const data = await response.json();
       setTeachers(data);
     } catch (error) {
@@ -56,11 +57,11 @@ const AdminDashBoard = () => {
                   </TableHead>
                   <TableBody>
                     {students.map((student) => (
-                      <TableRow key={student.student_id}>
-                        <TableCell>{student.student_id}</TableCell>
-                        <TableCell>{student.student_name}</TableCell>
-                        <TableCell>{student.student_username}</TableCell>
-                        <TableCell>{student.enrolled_courses}</TableCell>
+                      <TableRow key={student.studentId}>
+                        <TableCell>{student.studentId}</TableCell>
+                        <TableCell>{student.studentName}</TableCell>
+                        <TableCell>{student.studentUsername}</TableCell>
+                        <TableCell>{student.enrolledCourses}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -87,9 +88,9 @@ const AdminDashBoard = () => {
                   <TableBody>
                     {teachers.map((teacher) => (
                       <TableRow key={teacher.teacher_id}>
-                        <TableCell>{teacher.teacher_id}</TableCell>
-                        <TableCell>{teacher.teacher_name}</TableCell>
-                        <TableCell>{teacher.teacher_username}</TableCell>
+                        <TableCell>{teacher._id}</TableCell>
+                        <TableCell>{teacher.name}</TableCell>
+                        <TableCell>{teacher.username}</TableCell>
                         <TableCell>{teacher.course_name ? teacher.course_name : "No Course Assigned"}</TableCell>
                       </TableRow>
                     ))}

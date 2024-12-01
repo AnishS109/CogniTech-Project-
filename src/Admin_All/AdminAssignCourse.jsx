@@ -1,63 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from './LAYOUT/AdminLayout';
-import { Box, Button, Grid, Modal, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography, Snackbar } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid,
+  Modal,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+  Snackbar,
+} from '@mui/material';
 
 const AdminAssignCourse = () => {
   const [openModal, setOpenModal] = useState(false);
   const [assignCourse, setAssignCourse] = useState({
-    teacherId: '',
+    teacher_username: '',
     courseId: '',
   });
-  const [teachers, setTeachers] = useState([]);
+  const [teachers, setTeachers] = useState([]); // Ensure teachers is initialized as an array
+  const [courses, setCourses] = useState([]);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Function to handle course assignment form changes
   const handleAssignCourse = (e) => {
     const { name, value } = e.target;
-    setAssignCourse((prevstate) => ({
-      ...prevstate,
+    setAssignCourse((prevState) => ({
+      ...prevState,
       [name]: value,
     }));
   };
 
-  // Open modal to assign course
   const handleOpen = () => {
     setOpenModal(true);
   };
 
-  // Close modal
   const handleClose = () => {
     setOpenModal(false);
-    // Reset form when modal is closed
-    setAssignCourse({ teacherId: '', courseId: '' });
+    setAssignCourse({ teacher_username: '', courseId: '' });
   };
 
-  // Function to handle course assignment form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch('http://localhost:5000/api/admin-a/assign-course', {
+      const response = await fetch('http://localhost:5001/api/admin-t/course-assign', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          teacher_id: assignCourse.teacherId,
-          course_id: assignCourse.courseId,
-        }),
+        body: JSON.stringify(assignCourse),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage('Course assigned successfully!');
+        setSuccessMessage(data.message);
         setError('');
-        // Optionally, you can fetch the updated list of teachers here if needed
-        // setTeachers(data); // You might fetch teachers from another API endpoint if necessary
+        handleClose();
+        fetchTeachers(); // Refresh teacher list
       } else {
-        setError('Failed to assign course');
+        setError(data.message || 'Failed to assign course');
         setSuccessMessage('');
       }
     } catch (error) {
@@ -66,20 +72,58 @@ const AdminAssignCourse = () => {
     }
   };
 
-  // Fetch the list of teachers on component mount
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/admin-t/teacher-course'); // Adjust this endpoint as needed
-        const data = await response.json();
-        setTeachers(data);
-      } catch (error) {
-        console.error('Error fetching teachers:', error);
-      }
-    };
+  const fetchTeachers = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/admin-t/course-details-teacher');
+      const data = await response.json();
 
+      // Ensure the data is an array before setting it
+      setTeachers(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching teachers:', error);
+      setTeachers([]); // Fallback to an empty array
+    }
+  };
+
+  const fetchCourses = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/admin-t/all-courses');
+      const data = await response.json();
+
+      // Ensure the data is an array before setting it
+      setCourses(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchTeachers();
-  }, []); // Only run on mount
+    fetchCourses();
+  }, []);
+
+  const handleDelete = async (teacherId, courseId) => {
+    try {
+      const response = await fetch('http://localhost:5001/api/admin-t/course-delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ teacherId, courseId }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        fetchTeachers(); // Refresh the list
+      } else {
+        setError(data.message || 'Failed to delete assignment');
+      }
+    } catch (error) {
+      setError('Error in deleting the course');
+    }
+  };
 
   return (
     <>
@@ -113,21 +157,31 @@ const AdminAssignCourse = () => {
 
                 <TextField
                   variant="outlined"
-                  label="Enter Teacher Id"
-                  name="teacherId"
+                  label="Enter Teacher Username"
+                  name="teacher_username"
                   fullWidth
-                  value={assignCourse.teacherId}
+                  value={assignCourse.teacher_username}
                   onChange={handleAssignCourse}
                 />
 
                 <TextField
                   variant="outlined"
-                  label="Enter Course Id"
+                  label="Enter course Id"
                   name="courseId"
                   fullWidth
                   value={assignCourse.courseId}
                   onChange={handleAssignCourse}
-                />
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  <option value="">Select a course</option>
+                  {courses.map((course) => (
+                    <option key={course._id} value={course._id}>
+                      {course.course_name}
+                    </option>
+                  ))}
+                </TextField>
 
                 <center>
                   <Button type="submit" variant="outlined" sx={{ width: '100px' }}>
@@ -140,23 +194,18 @@ const AdminAssignCourse = () => {
         </Modal>
 
         {/* Display success or error messages */}
-        {successMessage && (
-          <Snackbar
-            open={!!successMessage}
-            autoHideDuration={6000}
-            message={successMessage}
-            onClose={() => setSuccessMessage('')}
-          />
-        )}
-
-        {error && (
-          <Snackbar
-            open={!!error}
-            autoHideDuration={6000}
-            message={error}
-            onClose={() => setError('')}
-          />
-        )}
+        <Snackbar
+          open={!!successMessage}
+          autoHideDuration={6000}
+          message={successMessage}
+          onClose={() => setSuccessMessage('')}
+        />
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          message={error}
+          onClose={() => setError('')}
+        />
 
         {/* Teacher Details Table */}
         <Box sx={{ marginBottom: 3 }}>
@@ -173,17 +222,35 @@ const AdminAssignCourse = () => {
                       <TableCell>Teacher Name</TableCell>
                       <TableCell>Username</TableCell>
                       <TableCell>Course Assigned</TableCell>
+                      <TableCell>Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {teachers.map((teacher) => (
-                      <TableRow key={teacher.teacher_id}>
-                        <TableCell>{teacher.teacher_id}</TableCell>
-                        <TableCell>{teacher.teacher_name}</TableCell>
-                        <TableCell>{teacher.teacher_username}</TableCell>
-                        <TableCell>{teacher.course_name}</TableCell>
+                    {teachers.length > 0 ? (
+                      teachers.map((teacher) => (
+                        <TableRow key={teacher.teacher._id}>
+                          <TableCell>{teacher.teacher._id}</TableCell>
+                          <TableCell>{teacher.teacher.name}</TableCell>
+                          <TableCell>{teacher.teacher.username}</TableCell>
+                          <TableCell>{teacher.course.course_name}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={() => handleDelete(teacher.teacher._id, teacher.course._id)}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} align="center">
+                          No Course is Assigned.
+                        </TableCell>
                       </TableRow>
-                    ))}
+                    )}
                   </TableBody>
                 </Table>
               </Box>

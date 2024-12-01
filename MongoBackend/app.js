@@ -10,6 +10,7 @@ import router from "./routes/FetchCourse.js";
 import AdminStudentFetch from "./routes/AdminStudentFetch.js";
 import AdminUserManage from "./routes/AdminUserManage.js";
 import AdminDeleteCourse from "./routes/AdminDeleteCourse.js";
+import AssignTeacher from "./routes/AssignTeacher.js";
 
 
 const app = express()
@@ -26,6 +27,7 @@ app.use("/api/router",router)
 app.use("/api/admin-s",AdminStudentFetch)
 app.use("/api/admin-user-m",AdminUserManage)
 app.use("/api/admin-d",AdminDeleteCourse)
+app.use("/api/admin-t",AssignTeacher)
 
 
 app.use((req,res,next) => {

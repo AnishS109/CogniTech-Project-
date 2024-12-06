@@ -56,6 +56,7 @@ const AdminAssignCourse = () => {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         setSuccessMessage(data.message);
@@ -79,6 +80,7 @@ const AdminAssignCourse = () => {
 
       // Ensure the data is an array before setting it
       setTeachers(Array.isArray(data) ? data : []);
+      console.log(teachers);
     } catch (error) {
       console.error('Error fetching teachers:', error);
       setTeachers([]); // Fallback to an empty array

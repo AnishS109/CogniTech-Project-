@@ -6,6 +6,7 @@ const AdminDashBoard = () => {
 
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   const fetchStudents = async () => {
     try {
@@ -19,14 +20,16 @@ const AdminDashBoard = () => {
   };
 
   useEffect(() => {
-    fetchStudents(); 
+    fetchStudents();
   }, []);
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/admin-s/teacher-details'); 
+      const response = await fetch('http://localhost:5001/api/admin-t/course-details-teacher'); 
       const data = await response.json();
       setTeachers(data);
+      // console.log(teachers);
+      // console.log(data);
     } catch (error) {
       console.error('Error fetching teacher data:', error);
     }
@@ -87,11 +90,12 @@ const AdminDashBoard = () => {
                   </TableHead>
                   <TableBody>
                     {teachers.map((teacher) => (
-                      <TableRow key={teacher.teacher_id}>
-                        <TableCell>{teacher._id}</TableCell>
-                        <TableCell>{teacher.name}</TableCell>
-                        <TableCell>{teacher.username}</TableCell>
-                        <TableCell>{teacher.course_name ? teacher.course_name : "No Course Assigned"}</TableCell>
+                      <TableRow key={teacher.teacher._id}>
+                        <TableCell>{teacher.teacher._id}</TableCell>
+                        <TableCell>{teacher.teacher.name}</TableCell>
+                        <TableCell>{teacher.teacher.username}</TableCell>
+                        {/* {console.log(teacher.course.course_name)} */}
+                        <TableCell>{teacher.course.course_name?teacher.course.course_name:"No Course Assigned"}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

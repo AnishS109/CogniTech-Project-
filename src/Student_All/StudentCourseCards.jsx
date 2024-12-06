@@ -110,8 +110,6 @@ const StudentCourseCards = () => {
     }
   };
 
-
-
   return (
     <>
       <Box sx={{ padding: 2 }}>

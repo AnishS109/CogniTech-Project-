@@ -12,6 +12,7 @@ import AdminUserManage from "./routes/AdminUserManage.js";
 import AdminDeleteCourse from "./routes/AdminDeleteCourse.js";
 import AssignTeacher from "./routes/AssignTeacher.js";
 import TeacherDashBoard from "./routes/TeacherDashBoard.js";
+// import TeachermanageCourse from "./routes/TeacherManageCourse.js";
 
 
 const app = express()
@@ -30,6 +31,7 @@ app.use("/api/admin-user-m",AdminUserManage)
 app.use("/api/admin-d",AdminDeleteCourse)
 app.use("/api/admin-t",AssignTeacher)
 app.use("/api/teacher-dashboard",TeacherDashBoard)
+// app.use("/api/teacher-manage-course",TeachermanageCourse)  
 
 
 app.use((req,res,next) => {

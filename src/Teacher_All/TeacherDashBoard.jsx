@@ -1,121 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import TeacherLayout from "./LAYOUT/TeacherLayout";
-// import { useLocation } from "react-router-dom";
-// import {
-//   Box,
-//   Typography,
-//   Tabs,
-//   Tab,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Paper,
-// } from "@mui/material";
-
-// const TeacherDashBoard = () => {
-//   const [courses, setCourses] = useState([]);
-//   const [selectedCourseIndex, setSelectedCourseIndex] = useState(0); // State for active course tab
-//   const location = useLocation();
-
-//   const teacherIdFromLocation = location.state?.teacher_id;
-//   const teacherId = teacherIdFromLocation || localStorage.getItem("teacher_id");
-
-//   useEffect(() => {
-//     // Fetch courses and students
-//     const fetchCourses = async () => {
-//       try {
-//         const response = await axios.get(
-//           `http://localhost:5001/api/teacher-dashboard/course-student-fetch/${teacherId}`
-//         );
-//         setCourses(response.data);
-//         console.log(response.data);
-//       } catch (error) {
-//         console.error("Error fetching courses:", error);
-//       }
-//     };
-
-//     fetchCourses();
-//   }, [teacherId]);
-
-//   // Handle course tab change
-//   const handleCourseChange = (event, newIndex) => {
-//     setSelectedCourseIndex(newIndex);
-//   };
-
-//   return (
-//     <TeacherLayout>
-//       <Box sx={{ padding: "20px" }}>
-//         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
-//           Teacher Dashboard
-//         </Typography>
-
-//         {/* Tabs for courses */}
-//         <Tabs
-//           value={selectedCourseIndex}
-//           onChange={handleCourseChange}
-//           variant="scrollable"
-//           scrollButtons="auto"
-//           sx={{ marginBottom: "20px", borderBottom: "1px solid #ddd" }}
-//         >
-//           {courses.map((course, index) => (
-//             <Tab key={index} label={course.courseName} />
-//           ))}
-//         </Tabs>
-
-//         {/* Enrolled students for the selected course */}
-//         {courses.length > 0 ? (
-//           <Box>
-//             <Typography
-//               variant="h5"
-//               gutterBottom
-//               sx={{ fontWeight: "bold", marginTop: "10px" }}
-//             >
-//               Enrolled Students
-//             </Typography>
-//             <TableContainer component={Paper}>
-//               <Table>
-//                 <TableHead>
-//                   <TableRow>
-//                     <TableCell sx={{ fontWeight: "bold" }}>S No.</TableCell>
-//                     <TableCell sx={{ fontWeight: "bold" }}>Student Name</TableCell>
-//                   </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                   {courses[selectedCourseIndex]?.students.length > 0 ? (
-//                     courses[selectedCourseIndex].students.map((student, index) => (
-//                       <TableRow key={index}>
-//                         <TableCell>{index + 1}</TableCell>
-//                         <TableCell>{student}</TableCell>
-//                       </TableRow>
-//                     ))
-//                   ) : (
-//                     <TableRow>
-//                       <TableCell colSpan={2} align="center">
-//                         No students enrolled
-//                       </TableCell>
-//                     </TableRow>
-//                   )}
-//                 </TableBody>
-//               </Table>
-//             </TableContainer>
-//           </Box>
-//         ) : (
-//           <Typography variant="h6" color="textSecondary">
-//             No courses found.
-//           </Typography>
-//         )}
-//       </Box>
-//     </TeacherLayout>
-//   );
-// };
-
-// export default TeacherDashBoard;
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TeacherLayout from "./LAYOUT/TeacherLayout";
@@ -132,43 +14,41 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Grid,
-  Divider,
   Card,
-  CardContent,
   Button,
   Avatar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { blue, grey, green } from "@mui/material/colors";
 
 const TeacherDashBoard = () => {
   const [courses, setCourses] = useState([]);
-  const [selectedCourseIndex, setSelectedCourseIndex] = useState(0); // State for active course tab
+  const [selectedCourseIndex, setSelectedCourseIndex] = useState(0);
+  const [openModal, setOpenModal] = useState(false); // Modal state
+  const [studentToDelete, setStudentToDelete] = useState(null); // Student to delete
   const location = useLocation();
 
   const teacherIdFromLocation = location.state?.teacher_id;
   const storedTeacherId = localStorage.getItem("teacher_id");
-  
-  // If teacherIdFromLocation exists, update localStorage
+
   useEffect(() => {
     if (teacherIdFromLocation) {
       localStorage.setItem("teacher_id", teacherIdFromLocation);
     }
   }, [teacherIdFromLocation]);
-  
-  // Use teacherId from location or fallback to localStorage
+
   const teacherId = teacherIdFromLocation || storedTeacherId;
 
-
   useEffect(() => {
-    // Fetch courses and students
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
           `http://localhost:5001/api/teacher-dashboard/course-student-fetch/${teacherId}`
         );
         setCourses(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -177,14 +57,56 @@ const TeacherDashBoard = () => {
     fetchCourses();
   }, [teacherId]);
 
-  // Handle course tab change
   const handleCourseChange = (event, newIndex) => {
     setSelectedCourseIndex(newIndex);
   };
 
-  const handleDelete = (username_stu) => {
-    console.log(username_stu);
-  }
+  // Open the confirmation modal
+  const handleDeleteClick = (student) => {
+    setStudentToDelete(student);
+    setOpenModal(true);
+  };
+
+  // Handle deletion after confirmation
+  const handleDeleteConfirm = async () => {
+    const studentId = studentToDelete._id;
+    const courseId = courses[selectedCourseIndex]?.courseId;
+
+    if (!courseId) {
+      alert("Course ID is undefined!");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:5001/api/teacher-dashboard/course/${courseId}/student/${studentId}`
+      );
+
+      setCourses((prevCourses) =>
+        prevCourses.map((course, index) =>
+          index === selectedCourseIndex
+            ? {
+                ...course,
+                students: course.students.filter((student) => student._id !== studentId),
+              }
+            : course
+        )
+      );
+
+      alert(response.data.message);
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      alert("Failed to delete the student.");
+    }
+
+    // Close the modal
+    setOpenModal(false);
+  };
+
+  // Close the modal without deleting
+  const handleDeleteCancel = () => {
+    setOpenModal(false);
+  };
 
   return (
     <TeacherLayout>
@@ -193,7 +115,6 @@ const TeacherDashBoard = () => {
           Teacher Dashboard
         </Typography>
 
-        {/* Tabs for courses */}
         <Tabs
           value={selectedCourseIndex}
           onChange={handleCourseChange}
@@ -204,7 +125,6 @@ const TeacherDashBoard = () => {
             borderBottom: "2px solid",
             borderColor: blue[300],
             "& .MuiTab-root": { fontWeight: "bold", color: blue[700] },
-            "& .Mui-selected": { color: green[600] },
           }}
         >
           {courses.map((course, index) => (
@@ -212,14 +132,9 @@ const TeacherDashBoard = () => {
           ))}
         </Tabs>
 
-        {/* Enrolled students for the selected course */}
         {courses.length > 0 ? (
           <Box>
-            <Typography
-              variant="h5"
-              gutterBottom
-              sx={{ fontWeight: "bold", marginTop: "10px", color: blue[700] }}
-            >
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", marginTop: "10px", color: blue[700] }}>
               Enrolled Students
             </Typography>
 
@@ -233,7 +148,6 @@ const TeacherDashBoard = () => {
                       <TableCell sx={{ fontWeight: "bold", color: blue[800] }}>Username</TableCell>
                       <TableCell sx={{ fontWeight: "bold", color: blue[800] }}>Enrollment Date</TableCell>
                       <TableCell sx={{ fontWeight: "bold", color: blue[800] }}>REMOVE</TableCell>
-                      
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -251,17 +165,15 @@ const TeacherDashBoard = () => {
                           </TableCell>
                           <TableCell>{student.username}</TableCell>
                           <TableCell>{new Date(student.enrollmentDate).toLocaleDateString()}</TableCell>
-                          <TableCell >
-
-                            <Button 
-                            variant="contained" 
-                            color="error"
-                            onClick={() => handleDelete(student.username)}
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={() => handleDeleteClick(student)} // Open modal with student
                             >
                               Delete
-                              </Button>
-                              </TableCell>
-
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -282,6 +194,24 @@ const TeacherDashBoard = () => {
           </Typography>
         )}
       </Box>
+
+      {/* Modal for confirmation */}
+      <Dialog open={openModal} onClose={handleDeleteCancel}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to remove {studentToDelete?.name} from this course?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </TeacherLayout>
   );
 };

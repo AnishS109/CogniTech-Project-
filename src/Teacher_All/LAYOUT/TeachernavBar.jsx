@@ -40,10 +40,7 @@ const TeachernavBar = () => {
           <NavLink activeClassName="active" to="/teacher-dashboard">Home</NavLink>
         </li>
         <li>
-          <NavLink activeClassName="active" to="/teacher-courses">Courses</NavLink>
-        </li>
-        <li>
-          <NavLink activeClassName="active" to="/teacher-quiz">Quiz</NavLink> 
+          <NavLink activeClassName="active" to="/teacher-courses">Manage Course</NavLink>
         </li>
         <li>
           <NavLink activeClassName="active" to="/teacher-about">About</NavLink>
@@ -81,11 +78,8 @@ const TeachernavBar = () => {
                   <NavLink activeClassName="active" to="/teacher-dashboard">Home</NavLink>
                 </li>
                 <li>
-                  <NavLink activeClassName="active" to="/teacher-courses">Courses</NavLink>
-                </li>
-                <li>
-                  <NavLink activeClassName="active" to="/teacher-quiz">Quiz</NavLink> 
-                </li>
+                  <NavLink activeClassName="active" to="/teacher-courses">Manage Course</NavLink>
+                </li> 
                 <li>
                   <NavLink activeClassName="active" to="/teacher-about">About</NavLink>
                 </li>

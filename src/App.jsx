@@ -16,7 +16,6 @@ import TeacherDashBoard from './Teacher_All/TeacherDashBoard.jsx'
 import StudentCourse from './Student_All/StudentCourse.jsx'
 import StudentAbout from './Student_All/StudentAbout.jsx'
 import TeacherCourses from './Teacher_All/TeacherCourses.jsx'
-import TeacherQuiz from './Teacher_All/TeacherQuiz.jsx'
 import TeacherAbout from './Teacher_All/TeacherAbout.jsx'
 import AdminUserManage from './Admin_All/AdminUserManage.jsx'
 import AdminCourseManage from './Admin_All/AdminCourseManage.jsx'
@@ -62,8 +61,6 @@ function App() {
     <Route path="/student-about" element={<StudentAbout/>}/>
 
     <Route path="/teacher-courses" element={<TeacherCourses/>}/>
-
-    <Route path="/teacher-quiz" element={<TeacherQuiz/>}/>
 
     <Route path="/teacher-about" element={<TeacherAbout/>}/>
 

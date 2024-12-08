@@ -15,6 +15,14 @@ const AdminRegistration = () => {
     type: 'Admin'
   });
 
+  const [uniqueCode, setUniqueCode] = useState('')
+
+  const handleUniqueCode = (e) => {
+    setUniqueCode(e.target.value)
+  }
+
+  const UNIQUE_CODE = 9098
+
   const [error, setError] = useState(''); 
   const [successMessage, setSuccessMessage] = useState('');  // State to handle success messages
   const [loading, setLoading] = useState(false); // State to handle loading state
@@ -36,6 +44,11 @@ const AdminRegistration = () => {
     if (!name || !email || !phone_number || !username || !password) {
       setError('All fields are required.');
       return;
+    }
+
+    if (uniqueCode != UNIQUE_CODE){
+      setError("Unique Code is Incorrect")
+      return
     }
 
     setError('');
@@ -227,6 +240,24 @@ const AdminRegistration = () => {
             }}
           />
 
+          <TextField
+            fullWidth
+            label="Unique Code"
+            type="text"
+            variant="outlined"
+            value={uniqueCode}
+            onChange={handleUniqueCode}
+            margin="normal"
+            required
+            name="Unique Code"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px',
+                backgroundColor: '#f7f7f7',
+              },
+            }}
+          />
+
           <Button
             fullWidth
             variant="contained"
@@ -246,6 +277,9 @@ const AdminRegistration = () => {
           >
             {loading ? 'Submitting...' : 'Register'}
           </Button>
+
+          
+
         </form>
       </Box>
     </Box>

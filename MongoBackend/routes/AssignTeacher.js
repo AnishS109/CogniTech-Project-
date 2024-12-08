@@ -11,6 +11,9 @@ AssignTeacher.use(cors())
 AssignTeacher.use(express.json())
 AssignTeacher.use(express.urlencoded({extended:true}))
 
+// const course_Id = "6745eb52463ef3002e59c35b"; // Course ID
+// const teacher_Id = "6755cd044f6eecb034cb93ef"; // Teacher ID
+
 AssignTeacher.post("/course-assign", async (req, res) => {
   const { teacher_username, courseId } = req.body;
 
@@ -44,6 +47,14 @@ AssignTeacher.post("/course-assign", async (req, res) => {
       teacherId: teacher._id,
       courseId: course._id,
     });
+
+    // const newAssignment = new AssignTeacherSchema({
+    //   teacher_Id,
+    //   course_Id,
+    // });
+
+    // await newAssignment.save();
+    // console.log("DONE");
 
     await assignteacher.save();
     res.status(201).json({ message: "Teacher successfully assigned to the course" });
@@ -106,3 +117,7 @@ AssignTeacher.delete("/course-delete", async (req, res) => {
 
 
 export default AssignTeacher
+
+// 6745eb52463ef3002e59c35b
+
+// 6755cd044f6eecb034cb93ef
